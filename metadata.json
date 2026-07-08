@@ -1,0 +1,13 @@
+{
+  "name": "TKA Egypt Academy - ERP",
+  "description": "The official academy management system for TKA Egypt, providing a comprehensive portal for students, trainers, and administrative staff with advanced tracking and AI-powered productivity tools.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "education",
+    "management",
+    "real-time"
+  ]
+}

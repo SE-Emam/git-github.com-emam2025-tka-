@@ -1,0 +1,317 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user account details, roles, and training data.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phoneNumber": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "dob": { "type": "string" },
+        "address": { "type": "string" },
+        "education": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["School", "University", "Graduate"] },
+            "year": { "type": "string" },
+            "major": { "type": "string" },
+            "qualification": { "type": "string" }
+          }
+        },
+        "role": { "type": "string", "enum": ["student", "trainer", "supervisor", "admin", "trial"] },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "active", "suspended"] },
+        "assignedLevel": { "type": "string" },
+        "groupId": { "type": "string" },
+        "nationalId": { "type": "string" },
+        "isTrial": { "type": "boolean" },
+        "createdAt": { "type": "number" },
+        "subscriptionExpiry": { "type": "number" }
+      },
+      "required": ["uid", "name", "role", "createdAt"]
+    },
+    "TrainingGroup": {
+      "title": "Training Group",
+      "description": "Groups of students assigned to multiple trainers.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "trainerIds": { "type": "array", "items": { "type": "string" } },
+        "studentIds": { "type": "array", "items": { "type": "string" } },
+        "isActive": { "type": "boolean" },
+        "jitsiRoom": { "type": "string" },
+        "isLive": { "type": "boolean" },
+        "scheduledTime": { "type": "number" }
+      },
+      "required": ["name", "trainerIds", "isActive"]
+    },
+    "LearningMaterial": {
+      "title": "Learning Material",
+      "description": "Material uploaded by an individual trainer for a group.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "fileUrl": { "type": "string" },
+        "trainerId": { "type": "string" },
+        "groupId": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["title", "trainerId", "groupId"]
+    },
+    "StudentProgress": {
+      "title": "Student Progress",
+      "description": "Marks and feedback from trainers.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "trainerId": { "type": "string" },
+        "groupId": { "type": "string" },
+        "marks": { "type": "number" },
+        "maxMarks": { "type": "number" },
+        "feedback": { "type": "string" },
+        "type": { "type": "string", "enum": ["assignment", "exam", "quiz"] },
+        "date": { "type": "number" }
+      },
+      "required": ["studentId", "trainerId", "groupId", "marks"]
+    },
+    "PaymentRecord": {
+      "title": "Payment Record",
+      "description": "Financial records for student subscriptions.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "number" },
+        "status": { "type": "string", "enum": ["completed", "pending", "failed"] },
+        "method": { "type": "string" },
+        "notes": { "type": "string" },
+        "period": { "type": "string", "description": "e.g. Month 1, Month 2" }
+      },
+      "required": ["studentId", "amount", "date", "status"]
+    },
+    "StudentNote": {
+      "title": "Student Note",
+      "description": "Internal supervisor notes about a student.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "content": { "type": "string" },
+        "type": { "type": "string", "enum": ["discount_excellence", "discount_social", "dues", "general"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["studentId", "authorId", "content", "type"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System alerts for users.",
+      "type": "object",
+      "properties": {
+        "recipientId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["payment_reminder", "submission", "system"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["recipientId", "title", "message", "read"]
+    },
+    "AttendanceRecord": {
+      "title": "Attendance Record",
+      "description": "Daily attendance for a group.",
+      "type": "object",
+      "properties": {
+        "groupId": { "type": "string" },
+        "date": { "type": "string" },
+        "presentIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["groupId", "date"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Message in a group chat.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["senderId", "senderName", "content", "createdAt"]
+    },
+    "Certificate": {
+      "title": "Certificate",
+      "description": "Issued certificates for completing programs.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "programName": { "type": "string" },
+        "issueDate": { "type": "number" },
+        "verificationCode": { "type": "string" },
+        "qrUrl": { "type": "string" },
+        "issuerId": { "type": "string" }
+      },
+      "required": ["studentId", "issueDate", "verificationCode"]
+    },
+    "TrainingRequest": {
+      "title": "Training Request",
+      "description": "Comprehensive form for training and development services.",
+      "type": "object",
+      "properties": {
+        "applicantType": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "jobTitle": { "type": "string" },
+        "companyName": { "type": "string" },
+        "trainingFields": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["pending", "contacted", "scheduled", "completed"] },
+        "submittedAt": { "type": "object", "description": "Firestore serverTimestamp" }
+      },
+      "required": ["applicantType", "fullName", "email", "phone", "status"]
+    },
+    "TrainerAssessment": {
+      "title": "Trainer Assessment",
+      "description": "Evaluation of a trainer's performance by management or observers.",
+      "type": "object",
+      "properties": {
+        "trainerId": { "type": "string" },
+        "trainerName": { "type": "string" },
+        "programName": { "type": "string" },
+        "evaluatorId": { "type": "string" },
+        "evaluatorName": { "type": "string" },
+        "evaluatorRole": { "type": "string" },
+        "knowledgeScore": { "type": "number" },
+        "communicationScore": { "type": "number" },
+        "materialsScore": { "type": "number" },
+        "organizationScore": { "type": "number" },
+        "totalScore": { "type": "number" },
+        "strengths": { "type": "string" },
+        "improvements": { "type": "string" },
+        "recommendation": { "type": "string" },
+        "managementDecision": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["trainerId", "evaluatorId", "totalScore"]
+    },
+    "ProgramAssessment": {
+      "title": "Program Assessment",
+      "description": "Evaluation of a training program's content and structure.",
+      "type": "object",
+      "properties": {
+        "programName": { "type": "string" },
+        "programCode": { "type": "string" },
+        "evaluatorId": { "type": "string" },
+        "evaluatorName": { "type": "string" },
+        "goalsAlignmentScore": { "type": "number" },
+        "contentQualityScore": { "type": "number" },
+        "designScore": { "type": "number" },
+        "measurementScore": { "type": "number" },
+        "totalScore": { "type": "number" },
+        "strengths": { "type": "string" },
+        "improvements": { "type": "string" },
+        "readinessStatus": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["programName", "evaluatorId", "totalScore"]
+    },
+    "StudentFeedback": {
+      "title": "Student Feedback",
+      "description": "Simple star rating and feedback from a student after a program.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "programName": { "type": "string" },
+        "trainerName": { "type": "string" },
+        "overallRating": { "type": "number" },
+        "metExpectations": { "type": "number" },
+        "recommendScore": { "type": "number" },
+        "nps": { "type": "number" },
+        "contentRating": { "type": "number" },
+        "trainerRating": { "type": "number" },
+        "logisticsRating": { "type": "number" },
+        "keyLearning": { "type": "string" },
+        "improvement": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["programName", "overallRating"]
+    },
+    "StudentPerformance": {
+      "title": "Student Performance",
+      "description": "Detailed tracking of student engagement, progress, and skills.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "programName": { "type": "string" },
+        "trainerId": { "type": "string" },
+        "attendance": { "type": "number" },
+        "completion": { "type": "number" },
+        "commitmentScore": { "type": "number" },
+        "theoreticalScore": { "type": "number" },
+        "practicalScore": { "type": "number" },
+        "skillsGained": { "type": "array", "items": { "type": "object" } },
+        "workplaceApplication": { "type": "string" },
+        "trainerRecommendation": { "type": "string" },
+        "finalGrade": { "type": "number" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["studentId", "trainerId", "finalGrade"]
+    },
+    "AssessmentRequest": {
+      "title": "Assessment Request",
+      "description": "A trigger for a user to fill out a specific assessment form.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "recipientEmail": { "type": "string" },
+        "recipientType": { "type": "string", "enum": ["student", "trainer", "supervisor", "external"] },
+        "type": { "type": "string", "enum": ["trainer_eval", "program_eval", "student_feedback", "performance_track"] },
+        "targetId": { "type": "string", "description": "ID of trainer, student, or program being evaluated" },
+        "targetName": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "completed", "expired"] },
+        "token": { "type": "string", "description": "Safe access token for external links" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["type", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/trainer_assessments/{id}": { "schema": "TrainerAssessment", "description": "Records of instructor evaluations." },
+    "/program_assessments/{id}": { "schema": "ProgramAssessment", "description": "Records of program content audits." },
+    "/student_feedback/{id}": { "schema": "StudentFeedback", "description": "Student satisfaction surveys." },
+    "/student_performance/{id}": { "schema": "StudentPerformance", "description": "Records of student progress." },
+    "/assessment_requests/{id}": { "schema": "AssessmentRequest", "description": "Pending requests for evaluation." },
+    "/certificates/{certId}": {
+      "schema": "Certificate",
+      "description": "Publicly verifiable certificates."
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Individual user profiles."
+    },
+    "/groups/{groupId}": {
+      "schema": "TrainingGroup",
+      "description": "Training groups management."
+    },
+    "/attendance/{recordId}": {
+      "schema": "AttendanceRecord",
+      "description": "Daily attendance records."
+    },
+    "/training_requests/{requestId}": {
+      "schema": "TrainingRequest",
+      "description": "Requests from individuals or companies for training services."
+    },
+    "/groups/{groupId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Messages sent by students and trainers in a group chat."
+    }
+  }
+}
